@@ -430,6 +430,10 @@ input[type="date"] {
   flex: 1;
 }
 
+.cd-add {
+  margin-top: 12px;
+}
+
 /* ====== TOAST ====== */
 .toast {
   position: fixed;

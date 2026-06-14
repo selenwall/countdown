@@ -81,6 +81,17 @@ function pad(n) {
   return String(n).padStart(2, "0");
 }
 
+function todayStr() {
+  return new Date().toISOString().split("T")[0];
+}
+
+/* Förvalt datum: två veckor framåt */
+function defaultDate() {
+  const d = new Date();
+  d.setDate(d.getDate() + 14);
+  return d.toISOString().split("T")[0];
+}
+
 function formatDate(dateStr) {
   const d = new Date(dateStr + "T00:00:00");
   return d.toLocaleDateString("sv-SE", {
@@ -337,6 +348,11 @@ function showForm(prefill) {
     titleInput.value = prefill.title || "";
     dateInput.value = prefill.date || "";
     selectTheme(THEMES[prefill.theme] ? prefill.theme : DEFAULT_THEME);
+  } else {
+    // Tom, fräsch nedräkning
+    titleInput.value = "";
+    dateInput.value = defaultDate();
+    selectTheme(DEFAULT_THEME);
   }
 
   renderSaved();
@@ -375,10 +391,8 @@ function init() {
   buildThemeGrid();
 
   // Förvalt datum: två veckor framåt
-  const d = new Date();
-  d.setDate(d.getDate() + 14);
-  dateInput.min = new Date().toISOString().split("T")[0];
-  dateInput.value = d.toISOString().split("T")[0];
+  dateInput.min = todayStr();
+  dateInput.value = defaultDate();
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -394,6 +408,7 @@ function init() {
 
   el("shareBtn").addEventListener("click", shareCurrent);
   el("editBtn").addEventListener("click", () => showForm(current));
+  el("addBtn").addEventListener("click", () => showForm());
 
   // Pausa/återuppta timer när fliken byts
   document.addEventListener("visibilitychange", () => {
